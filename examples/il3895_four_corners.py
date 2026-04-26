@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2026 Akkiesoft
 # SPDX-FileCopyrightText: Copyright (c) 2023 Scott Shawcroft for Adafruit Industries
 # SPDX-FileCopyrightText: Copyright (c) 2021 Melissa LeBlanc-Williams for Adafruit Industries
 #
@@ -17,26 +18,26 @@ import displayio
 import terminalio
 from fourwire import FourWire
 
-import adafruit_ssd1675
+import il3895
 
 displayio.release_displays()
 
 # This pinout works on a Feather RP2040 EPD and may need to be altered for other
 # boards. The older SSD1675 version with HINK on the ribbon cable 2.13" dual color
 # is connected directly via the ribbon cable.
-spi = busio.SPI(board.EPD_SCK, board.EPD_MOSI)  # Uses SCK and MOSI
-epd_cs = board.EPD_CS
-epd_dc = board.EPD_DC
-epd_reset = board.EPD_RESET
-epd_busy = board.EPD_BUSY
+spi = busio.SPI(clock=board.GP18, MOSI=board.GP19)  # Uses SCK and MOSI
+epd_cs = board.GP22
+epd_dc = board.GP10
+epd_reset = board.GP2
+epd_busy = board.GP6
 
 display_bus = FourWire(spi, command=epd_dc, chip_select=epd_cs, reset=epd_reset, baudrate=1000000)
-display = adafruit_ssd1675.SSD1675(
+display = il3895.IL3895(
     display_bus,
     width=250,
     height=122,
     busy_pin=epd_busy,
-    rotation=270,
+    rotation=90,
     seconds_per_frame=10,
 )
 
